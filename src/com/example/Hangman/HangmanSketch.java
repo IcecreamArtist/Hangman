@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HangmanSketch extends JApplet {
+
     public void paint(Graphics g) {
         // set the color
         g.setColor(Color.pink);
