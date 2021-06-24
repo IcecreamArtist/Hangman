@@ -69,7 +69,6 @@ public class Hangman {
                         flg = true;
                         // updating the obtained answer
                         cur = cur.substring(0, i) + ans.charAt(0) + cur.substring(i + 1);
-                        break;
                     }
                 }
 
