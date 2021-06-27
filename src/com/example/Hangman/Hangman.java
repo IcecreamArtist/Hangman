@@ -1,13 +1,12 @@
 package com.example.Hangman;
 
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Hangman {
 
-    public static Scanner getName(){
+    /** get name */
+    public static Scanner getName() {
         java.io.File file = new java.io.File("hangman.txt");
         Scanner input = null;
         try {
@@ -18,7 +17,8 @@ public class Hangman {
         return input;
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
+
+    public static void main(String[] args) {
 
         // input: the input stream of the file
         Scanner input = getName();
@@ -49,7 +49,7 @@ public class Hangman {
             int missCount = 0;
 
             // guessing
-            while (!cur.equals(Name)) {
+            while (!cur.equals(Name) && missCount < 7) {
                 // enter the character
                 // ans[0] is the input character
                 System.out.print("(Guess) Enter a letter in word ");
@@ -84,7 +84,7 @@ public class Hangman {
 
             // output the answer and the miss count
             System.out.println("The word is " + Name
-                    + ". You missed " + missCount + " time");
+                    + ". You missed " + missCount + ((missCount > 1) ? " times" : " time"));
         }
     }
 }

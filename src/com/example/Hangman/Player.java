@@ -8,45 +8,57 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+/** this class is the core of the GUI hangman project
+ * it implements keylistener, catching the input from the keyboard
+ * and update the sentences in the interface according to the input */
 public class Player implements KeyListener {
 
+    // the position increments of the hangman
     private int x = 0;
     private int y = 20;
-    private int velX = 3;
+    private int velX = 3; // velocity of animation
     private int velY = 4;
-    private URL url2;
+
+    // IO stream
+    private URL url;
+    private BufferedReader read;
+
+    // messages
     private String msg = "Guess a word:";
     private String msg2 = "To continue the game, Press ENTER";
-    private boolean finished = false;
-    private BufferedReader read;
-    private String name;
-    private String cur;
     private String msg3 = "Missed letters: ";
+
+    // detail
+    private boolean finished = false;
+    private String name; // string being guessed
+    private String cur; // current string
+
     private int missCount = 0;
     private boolean flg = false;
+
+    // for handling the keyboard event catcher
     private static Character lastKey = null;
     private String missLetters = "";
     private boolean[] hasLetters = new boolean[30];
 
 
-    public Player(GUI_Hangman2 hm) throws Exception {
-
-        // input the names
-        url2 = new URL("file:/C:/Users/Artis/IdeaProjects/Hangman/src/hangman.txt");
-        read = new BufferedReader(new InputStreamReader(url2.openStream()));
+    public Player() throws Exception {
+        // open the hangman.txt file to obtain the names
+        url = new URL("file:/C:/Users/Artis/IdeaProjects/Hangman/src/hangman.txt");
+        read = new BufferedReader(new InputStreamReader(url.openStream()));
 
         init();
     }
 
+    // initialize
     public void init() throws IOException {
-        // 初始化
-        // 读入新的猜测名字
+        // read the name
         try {
             name = read.readLine();
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
-        // 初始化cur
+        // initialize the position and current string
         x = 0;
         y = 20;
         velX = 3;
@@ -58,15 +70,20 @@ public class Player implements KeyListener {
         missLetters = "";
     }
 
+    // updating the graphics
     public void update(GUI_Hangman2 hm) {
 
+        // listener for keyboard
         hm.addKeyListener(this);
+        // if lose 7 times, finish
         if (missCount >= 7) {
             finished = true;
         }
+        // if guessed, finish
         if (cur.equals(name)) {
             finished = true;
         }
+        // hanging animation
         if (finished && missCount >= 7) {
             if (x <= -15 || x >= 15) velX = -velX;
             x += velX;
@@ -75,7 +92,7 @@ public class Player implements KeyListener {
         }
     }
 
-
+    // painting the graphics
     public void paint(Graphics g, GUI_Hangman2 hm) {
         g.setColor(Color.BLACK);
         g.drawLine(100, 30, 100, 270);
@@ -102,21 +119,25 @@ public class Player implements KeyListener {
         }
     }
 
+    // keyboard event listening
     @Override
     public void keyTyped(KeyEvent e) {
         char c = e.getKeyChar();
+        // prevent processing one typed key for over one time
         if (lastKey == null || c != lastKey) {
             lastKey = c;
+            // if it is enter
             if (finished && c == KeyEvent.VK_ENTER) {
                 finished = false;
 
-
+                // restart
                 try {
                     init();
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
             }
+            // if it is a character
             if (c >= 'a' && c <= 'z') {
 
                 flg = false;
@@ -141,6 +162,7 @@ public class Player implements KeyListener {
         }
     }
 
+    // these two methods we don't need to implement
     @Override
     public void keyPressed(KeyEvent e) {
         /*
